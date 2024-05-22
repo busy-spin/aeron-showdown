@@ -10,7 +10,7 @@ public class ExponentialBackOffIdleStrategy implements IdleStrategy {
 
     private final long initialBackoff;
 
-    private int backoffCounter;
+    private long backoffCounter;
 
     public ExponentialBackOffIdleStrategy(long initialBackoff, long maxBackOff) {
         this.maxBackOff = maxBackOff;

@@ -3,7 +3,7 @@ package com.github.busy_spin;
 import org.agrona.concurrent.Agent;
 import org.agrona.concurrent.SystemEpochClock;
 
-public class NoWorkAgent implements Agent {
+public class LogInvocationAgent implements Agent {
 
     long lastInvocationTime = -1;
 
@@ -18,7 +18,7 @@ public class NoWorkAgent implements Agent {
         long timeNow = SystemEpochClock.INSTANCE.time();
         if (lastInvocationTime > 0) {
             long invocationGap = timeNow - lastInvocationTime;
-            System.out.printf("Gap between invocations %d\n", invocationGap);
+            System.out.printf("Gap between invocations %dms\n", invocationGap);
         }
         lastInvocationTime = timeNow;
         return 0;

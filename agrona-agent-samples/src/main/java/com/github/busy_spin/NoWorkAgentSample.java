@@ -20,7 +20,7 @@ public class NoWorkAgentSample {
                         TimeUnit.SECONDS.toNanos(8)),
                 Throwable::printStackTrace,
                 errorCounter,
-                new NoWorkAgent());
+                new LogInvocationAgent());
         AgentRunner.startOnThread(runner, newThreadFactory(true));
 
         barrier.await();

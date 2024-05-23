@@ -12,6 +12,8 @@ public class ExponentialBackOffIdleStrategy implements IdleStrategy {
 
     private long backoffCounter;
 
+    private long currentBackOff = 0;
+
     public ExponentialBackOffIdleStrategy(long initialBackoff, long maxBackOff) {
         this.maxBackOff = maxBackOff;
         this.initialBackoff = initialBackoff;
@@ -22,12 +24,16 @@ public class ExponentialBackOffIdleStrategy implements IdleStrategy {
     public void idle(int workCount) {
         if (workCount > 0) {
             backoffCounter = 0;
+            currentBackOff = 0;
         } else {
-            long sleepTime = initialBackoff * Math.round(Math.pow(2, backoffCounter));
-            backoffCounter++;
-            long maxSleepTime = Math.min(sleepTime, maxBackOff);
+            if (currentBackOff < maxBackOff) {
+                long sleepTime = initialBackoff * Math.round(Math.pow(2, backoffCounter));
+                backoffCounter++;
+                currentBackOff = Math.min(sleepTime, maxBackOff);
+                System.out.printf("A new backoff calculated %dms\n", Math.round(currentBackOff * 1e-6));
+            }
 
-            LockSupport.parkNanos(maxSleepTime);
+            LockSupport.parkNanos(currentBackOff);
         }
     }
 

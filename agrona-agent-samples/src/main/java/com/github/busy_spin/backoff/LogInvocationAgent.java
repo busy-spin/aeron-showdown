@@ -1,4 +1,4 @@
-package com.github.busy_spin;
+package com.github.busy_spin.backoff;
 
 import org.agrona.concurrent.Agent;
 import org.agrona.concurrent.SystemEpochClock;

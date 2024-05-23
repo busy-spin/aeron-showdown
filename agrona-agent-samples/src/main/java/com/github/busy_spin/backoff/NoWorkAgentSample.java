@@ -1,10 +1,13 @@
-package com.github.busy_spin;
+package com.github.busy_spin.backoff;
 
-import org.agrona.concurrent.*;
+import com.github.busy_spin.util.ThreadFactoryUtils;
+import org.agrona.concurrent.AgentRunner;
+import org.agrona.concurrent.ShutdownSignalBarrier;
+import org.agrona.concurrent.SigInt;
+import org.agrona.concurrent.UnsafeBuffer;
 import org.agrona.concurrent.status.AtomicCounter;
 
 import java.nio.ByteBuffer;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 public class NoWorkAgentSample {
@@ -22,19 +25,11 @@ public class NoWorkAgentSample {
                 errorCounter,
                 new LogInvocationAgent())) {
 
-            AgentRunner.startOnThread(runner, newThreadFactory(true));
+            AgentRunner.startOnThread(runner, ThreadFactoryUtils.newThreadFactory(true));
             barrier.await();
         } finally {
             System.out.println("Exiting the program !!!");
         }
 
-    }
-
-    private static ThreadFactory newThreadFactory(boolean isDaemon) {
-        return r -> {
-            Thread thread = new Thread(r);
-            thread.setDaemon(isDaemon);
-            return thread;
-        };
     }
 }

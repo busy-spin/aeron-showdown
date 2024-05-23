@@ -15,15 +15,19 @@ public class NoWorkAgentSample {
 
         UnsafeBuffer buffer = new UnsafeBuffer(ByteBuffer.allocateDirect(2048));
         AtomicCounter errorCounter = new AtomicCounter(buffer, 0);
-        AgentRunner runner = new AgentRunner(
+        try (AgentRunner runner = new AgentRunner(
                 new ExponentialBackOffIdleStrategy(TimeUnit.SECONDS.toNanos(1),
                         TimeUnit.SECONDS.toNanos(8)),
                 Throwable::printStackTrace,
                 errorCounter,
-                new LogInvocationAgent());
-        AgentRunner.startOnThread(runner, newThreadFactory(true));
+                new LogInvocationAgent())) {
 
-        barrier.await();
+            AgentRunner.startOnThread(runner, newThreadFactory(true));
+            barrier.await();
+        } finally {
+            System.out.println("Exiting the program !!!");
+        }
+
     }
 
     private static ThreadFactory newThreadFactory(boolean isDaemon) {

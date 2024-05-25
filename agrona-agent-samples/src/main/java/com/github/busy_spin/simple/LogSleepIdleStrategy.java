@@ -2,7 +2,6 @@ package com.github.busy_spin.simple;
 
 import org.agrona.concurrent.IdleStrategy;
 
-import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 
@@ -19,12 +18,10 @@ public class LogSleepIdleStrategy implements IdleStrategy {
 
     @Override
     public void idle() {
-
     }
 
     @Override
     public void reset() {
-
     }
 
     @Override

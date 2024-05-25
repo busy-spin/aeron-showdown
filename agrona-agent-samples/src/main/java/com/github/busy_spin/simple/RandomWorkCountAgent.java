@@ -1,9 +1,7 @@
 package com.github.busy_spin.simple;
 
 import org.agrona.concurrent.Agent;
-
 import java.util.Random;
-import java.util.stream.IntStream;
 
 public class RandomWorkCountAgent implements Agent {
 

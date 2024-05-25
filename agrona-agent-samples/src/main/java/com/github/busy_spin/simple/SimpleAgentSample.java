@@ -4,12 +4,18 @@ import org.agrona.concurrent.AgentRunner;
 import org.agrona.concurrent.ShutdownSignalBarrier;
 import org.agrona.concurrent.SigInt;
 
+import java.util.concurrent.ThreadFactory;
+
 public class SimpleAgentSample {
     public static void main(String[] args) {
         ShutdownSignalBarrier barrier = new ShutdownSignalBarrier();
         try (AgentRunner agentRunner = new AgentRunner(new LogSleepIdleStrategy(),
                 throwable -> {}, null, new RandomWorkCountAgent())) {
-            AgentRunner.startOnThread(agentRunner);
+            AgentRunner.startOnThread(agentRunner, r -> {
+                Thread thread = new Thread();
+                thread.setDaemon(true);
+                return thread;
+            });
             SigInt.register(barrier::signal);
 
             barrier.await();

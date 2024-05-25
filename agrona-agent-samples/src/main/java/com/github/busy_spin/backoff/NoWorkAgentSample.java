@@ -1,10 +1,7 @@
 package com.github.busy_spin.backoff;
 
 import com.github.busy_spin.util.ThreadFactoryUtils;
-import org.agrona.concurrent.AgentRunner;
-import org.agrona.concurrent.ShutdownSignalBarrier;
-import org.agrona.concurrent.SigInt;
-import org.agrona.concurrent.UnsafeBuffer;
+import org.agrona.concurrent.*;
 import org.agrona.concurrent.status.AtomicCounter;
 
 import java.nio.ByteBuffer;
@@ -18,12 +15,13 @@ public class NoWorkAgentSample {
 
         UnsafeBuffer buffer = new UnsafeBuffer(ByteBuffer.allocateDirect(2048));
         AtomicCounter errorCounter = new AtomicCounter(buffer, 0);
+        Agent agent = new CustomNameCompositeAgent("Composite-Agent", new LogInvocationAgent());
         try (AgentRunner runner = new AgentRunner(
                 new ExponentialBackOffIdleStrategy(TimeUnit.SECONDS.toNanos(1),
                         TimeUnit.SECONDS.toNanos(8)),
                 Throwable::printStackTrace,
                 errorCounter,
-                new LogInvocationAgent())) {
+                agent)) {
 
             AgentRunner.startOnThread(runner, ThreadFactoryUtils.newThreadFactory(true));
             barrier.await();

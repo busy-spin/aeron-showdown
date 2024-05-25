@@ -18,7 +18,7 @@ public class LogInvocationAgent implements Agent {
         long timeNow = SystemEpochClock.INSTANCE.time();
         if (lastInvocationTime > 0) {
             long invocationGap = timeNow - lastInvocationTime;
-            System.out.printf("Gap between invocations %dms\n", invocationGap);
+            System.out.printf("%s - Gap between invocations %dms\n", Thread.currentThread().getName(), invocationGap);
         }
         lastInvocationTime = timeNow;
         return 0;
